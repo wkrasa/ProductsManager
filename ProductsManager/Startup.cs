@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ProductsManager.Data;
+using ProductsManager.Services;
 
 namespace ProductsManager
 {
@@ -29,6 +30,8 @@ namespace ProductsManager
             services.AddControllers();
 
             services.AddEntityFrameworkSqlite().AddDbContext<ProductsManagerDataContext>();
+
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

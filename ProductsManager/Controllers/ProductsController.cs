@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+
 using ProductsManager.Data;
 using ProductsManager.Data.Models;
+using ProductsManager.Services;
 
 namespace ProductsManager.Controllers
 {
@@ -16,20 +18,20 @@ namespace ProductsManager.Controllers
     {       
         private readonly ILogger<ProductsController> _logger;
 
-        private readonly ProductsManagerDataContext _db;
+        private readonly IProductService _productService;
 
         public ProductsController(
             ILogger<ProductsController> logger,
-            ProductsManagerDataContext db)
+            IProductService productService)
         {
             _logger = logger;
-            _db = db;
+            _productService = productService;
         }
 
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var products = await _db.Products.ToListAsync();
+            var products = await _productService.GetAll();
 
             return Ok(products);
         }
@@ -37,11 +39,11 @@ namespace ProductsManager.Controllers
         [HttpGet("/products/{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            var product = await _db.Products.SingleOrDefaultAsync(x => x.Id == id);
+            var product = await _productService.GetById(id);
 
-            if(product == null)
+            if (product == null)
             {
-                return NotFound();
+                return NotFound($"Product with '{id}' was not found");
             }
             else
             {
@@ -52,34 +54,29 @@ namespace ProductsManager.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Product product)
         {
-            var existingProduct = await _db.Products.SingleOrDefaultAsync(x => x.Name == product.Name);
+            var existingProduct = await _productService.GetByName(product.Name);
 
-            if(existingProduct != null)
+            if (existingProduct != null)
             {
                 return BadRequest($"Product with name '{product.Name}' already exists");
             }
 
-            await _db.Products.AddAsync(product);
-            await _db.SaveChangesAsync();
-            return Ok(product.Id);
+            var result = await _productService.Save(product);
+            return Ok(result);
         }
 
         [HttpPut]
         public async Task<ActionResult> Put(Product product)
         {
-            var existingProduct = await _db.Products.SingleOrDefaultAsync(x => x.Id == product.Id);
+            var existingProduct = await _productService.GetById(product.Id);
 
             if (product == null)
             {
-                return NotFound();
+                return NotFound($"Product with '{product.Id}' was not found");
             }
             else
             {
-                existingProduct.Name = product.Name;
-                existingProduct.Price = product.Price;
-
-                await _db.SaveChangesAsync();
-
+                await _productService.Update(product);
                 return Ok();
             }
         }
@@ -87,17 +84,15 @@ namespace ProductsManager.Controllers
         [HttpDelete("/products/{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var existingProduct = await _db.Products.SingleOrDefaultAsync(x => x.Id == id);
+            var existingProduct = await _productService.GetById(id);
 
             if (existingProduct == null)
             {
-                return NotFound();
+                return NotFound($"Product with '{id}' was not found");
             }
             else
             {
-                _db.Remove(existingProduct);
-                await _db.SaveChangesAsync();
-
+                await _productService.Delete(existingProduct);
                 return Ok();
             }
         }
