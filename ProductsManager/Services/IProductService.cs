@@ -9,16 +9,16 @@ namespace ProductsManager.Services
 {
     public interface IProductService
     {
-        Task<Product> GetById(Guid id);
+        Task<ProductDTO> GetById(Guid id);
 
-        Task<Product> GetByName(string name);
+        Task<ProductDTO> GetByName(string name);
 
-        Task<IEnumerable<Product>> GetAll();
+        Task<IEnumerable<ProductDTO>> GetAll();
 
-        Task<Guid> Save(Product product);
+        Task<Guid> Save(ProductDTO product);
 
-        Task Update(Product product);
+        Task Update(ProductDTO product);
 
-        Task Delete(Product product);
+        Task Delete(Guid guid);
     }
 }

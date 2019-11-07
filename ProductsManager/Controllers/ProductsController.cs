@@ -52,7 +52,7 @@ namespace ProductsManager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(Product product)
+        public async Task<ActionResult> Post(ProductDTO product)
         {
             var existingProduct = await _productService.GetByName(product.Name);
 
@@ -66,7 +66,7 @@ namespace ProductsManager.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(Product product)
+        public async Task<ActionResult> Put(ProductDTO product)
         {
             var existingProduct = await _productService.GetById(product.Id);
 
@@ -92,7 +92,7 @@ namespace ProductsManager.Controllers
             }
             else
             {
-                await _productService.Delete(existingProduct);
+                await _productService.Delete(id);
                 return Ok();
             }
         }
