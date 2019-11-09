@@ -53,7 +53,9 @@ namespace ProductsManager.Services
 
         public async Task<IEnumerable<ProductDTO>> GetAllAsync()
         {
-            var products = await _db.Products.ToListAsync();
+            var products = await _db.Products
+                .OrderBy(x => x.Name)
+                .ToListAsync();
 
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }

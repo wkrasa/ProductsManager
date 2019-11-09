@@ -13,10 +13,6 @@ namespace ProductsManager.Infrastrucutre
         public ProductsManagerProfile()
         {
             CreateMap<Product, ProductDTO>();
-
-            CreateMap<Product, CreateProductModel>();
-
-            CreateMap<Product, UpdateProductModel>();
         }
     }
 }

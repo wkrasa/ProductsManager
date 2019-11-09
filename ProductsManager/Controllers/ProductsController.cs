@@ -30,7 +30,7 @@ namespace ProductsManager.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> List()
         {
             var products = await _productService.GetAllAsync();
 
@@ -38,7 +38,7 @@ namespace ProductsManager.Controllers
         }
 
         [HttpGet("/products/{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult> GetProductById(Guid id)
         {
             var product = await _productService.GetByIdAsync(id);
 
@@ -53,21 +53,21 @@ namespace ProductsManager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CreateProductModel product)
+        public async Task<ActionResult> AddProduct([FromBody] CreateProductModel product)
         {
             var result = await _productService.SaveAsync(product);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] UpdateProductModel product)
+        public async Task<ActionResult> UpdateProduct([FromBody] UpdateProductModel product)
         {
             await _productService.UpdateAsync(product);
             return Ok();
         }
 
         [HttpDelete("/products/{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> RemoveProduct(Guid id)
         {
             var existingProduct = await _productService.GetByIdAsync(id);
 
