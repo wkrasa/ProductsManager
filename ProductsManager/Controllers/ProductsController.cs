@@ -16,7 +16,7 @@ namespace ProductsManager.Controllers
     [ApiController]
     [Route("[controller]")]
     public class ProductsController : ControllerBase
-    {       
+    {
         private readonly ILogger<ProductsController> _logger;
 
         private readonly IProductService _productService;
@@ -32,7 +32,7 @@ namespace ProductsManager.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
-            var products = await _productService.GetAll();
+            var products = await _productService.GetAllAsync();
 
             return Ok(products);
         }
@@ -40,7 +40,7 @@ namespace ProductsManager.Controllers
         [HttpGet("/products/{id}")]
         public async Task<ActionResult> Get(Guid id)
         {
-            var product = await _productService.GetById(id);
+            var product = await _productService.GetByIdAsync(id);
 
             if (product == null)
             {
@@ -53,39 +53,23 @@ namespace ProductsManager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(CreateProductModel product)
+        public async Task<ActionResult> Post([FromBody] CreateProductModel product)
         {
-            var existingProduct = await _productService.GetByName(product.Name);
-
-            if (existingProduct != null)
-            {
-                return BadRequest($"Product with name '{product.Name}' already exists");
-            }
-
-            var result = await _productService.Save(product);
+            var result = await _productService.SaveAsync(product);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(UpdateProductModel product)
+        public async Task<ActionResult> Put([FromBody] UpdateProductModel product)
         {
-            var existingProduct = await _productService.GetById(product.Id);
-
-            if (product == null)
-            {
-                return NotFound($"Product with '{product.Id}' was not found");
-            }
-            else
-            {
-                await _productService.Update(product);
-                return Ok();
-            }
+            await _productService.UpdateAsync(product);
+            return Ok();
         }
 
         [HttpDelete("/products/{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var existingProduct = await _productService.GetById(id);
+            var existingProduct = await _productService.GetByIdAsync(id);
 
             if (existingProduct == null)
             {
@@ -93,7 +77,7 @@ namespace ProductsManager.Controllers
             }
             else
             {
-                await _productService.Delete(id);
+                await _productService.DeleteAsync(id);
                 return Ok();
             }
         }

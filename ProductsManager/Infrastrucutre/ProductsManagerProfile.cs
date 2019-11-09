@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProductsManager.Services
+namespace ProductsManager.Infrastrucutre
 {
     public class ProductsManagerProfile: Profile
     {

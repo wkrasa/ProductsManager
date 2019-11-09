@@ -10,16 +10,20 @@ namespace ProductsManager.Services
 {
     public interface IProductService
     {
-        Task<ProductDTO> GetById(Guid id);
+        ProductDTO GetById(Guid id);
 
-        Task<ProductDTO> GetByName(string name);
+        Task<ProductDTO> GetByIdAsync(Guid id);
 
-        Task<IEnumerable<ProductDTO>> GetAll();
+        ProductDTO GetByName(string name);
 
-        Task<Guid> Save(CreateProductModel product);
+        Task<ProductDTO> GetByNameAsync(string name);
 
-        Task Update(UpdateProductModel product);
+        Task<IEnumerable<ProductDTO>> GetAllAsync();
 
-        Task Delete(Guid guid);
+        Task<Guid> SaveAsync(CreateProductModel product);
+
+        Task UpdateAsync(UpdateProductModel product);
+
+        Task DeleteAsync(Guid guid);
     }
 }

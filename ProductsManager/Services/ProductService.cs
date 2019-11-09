@@ -23,38 +23,42 @@ namespace ProductsManager.Services
             _mapper = mapper;
         }
 
-        public async Task<ProductDTO> GetById(Guid id)
+        public ProductDTO GetById(Guid id)
         {
-            var product =  await _db.Products.SingleOrDefaultAsync(x => x.Id == id);       
-            
-            if(product == null)
-            {
-                return null;
-            }
+            var product = _db.Products.SingleOrDefault(x => x.Id == id);
 
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public async Task<ProductDTO> GetByName(string name)
+        public async Task<ProductDTO> GetByIdAsync(Guid id)
+        {
+            var product =  await _db.Products.SingleOrDefaultAsync(x => x.Id == id);                  
+
+            return _mapper.Map<ProductDTO>(product);
+        }
+
+        public ProductDTO GetByName(string name)
+        {
+            var product = _db.Products.SingleOrDefault(x => x.Name == name);
+
+            return _mapper.Map<ProductDTO>(product);
+        }
+
+        public async Task<ProductDTO> GetByNameAsync(string name)
         {
             var product = await _db.Products.SingleOrDefaultAsync(x => x.Name == name);
 
-            if (product == null)
-            {
-                return null;
-            }
-
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAll()
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync()
         {
             var products = await _db.Products.ToListAsync();
 
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
-        public async Task<Guid> Save(CreateProductModel product)
+        public async Task<Guid> SaveAsync(CreateProductModel product)
         {
             var newProduct = new Product()
             {
@@ -67,7 +71,7 @@ namespace ProductsManager.Services
             return newProduct.Id;
         }
 
-        public async Task Update(UpdateProductModel product)
+        public async Task UpdateAsync(UpdateProductModel product)
         {
             var existingProduct = await _db.Products.SingleOrDefaultAsync(x => x.Id == product.Id);
 
@@ -77,7 +81,7 @@ namespace ProductsManager.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var existingProduct = await _db.Products.SingleOrDefaultAsync(x => x.Id == id);
 

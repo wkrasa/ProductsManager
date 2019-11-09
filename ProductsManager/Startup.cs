@@ -11,8 +11,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using FluentValidation.AspNetCore;
+
 using ProductsManager.Data;
 using ProductsManager.Services;
+using ProductsManager.Infrastrucutre;
 
 namespace ProductsManager
 {
@@ -30,7 +34,11 @@ namespace ProductsManager
         {
             services.AddAutoMapper(this.GetType().Assembly);
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(cfg =>
+            {
+                cfg.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
 
             services.AddEntityFrameworkSqlite().AddDbContext<ProductsManagerDataContext>();
 
