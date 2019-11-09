@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using ProductsManager.Data;
 using ProductsManager.Data.Models;
 using ProductsManager.Services;
+using ProductsManager.Services.Models;
 
 namespace ProductsManager.Controllers
 {
@@ -52,7 +53,7 @@ namespace ProductsManager.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(ProductDTO product)
+        public async Task<ActionResult> Post(CreateProductModel product)
         {
             var existingProduct = await _productService.GetByName(product.Name);
 
@@ -66,7 +67,7 @@ namespace ProductsManager.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(ProductDTO product)
+        public async Task<ActionResult> Put(UpdateProductModel product)
         {
             var existingProduct = await _productService.GetById(product.Id);
 

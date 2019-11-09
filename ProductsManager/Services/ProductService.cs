@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ProductsManager.Data;
 using ProductsManager.Data.Models;
+using ProductsManager.Services.Models;
 
 namespace ProductsManager.Services
 {
@@ -53,7 +54,7 @@ namespace ProductsManager.Services
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
-        public async Task<Guid> Save(ProductDTO product)
+        public async Task<Guid> Save(CreateProductModel product)
         {
             var newProduct = new Product()
             {
@@ -66,7 +67,7 @@ namespace ProductsManager.Services
             return newProduct.Id;
         }
 
-        public async Task Update(ProductDTO product)
+        public async Task Update(UpdateProductModel product)
         {
             var existingProduct = await _db.Products.SingleOrDefaultAsync(x => x.Id == product.Id);
 

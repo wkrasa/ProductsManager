@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using ProductsManager.Data.Models;
+using ProductsManager.Services.Models;
 
 namespace ProductsManager.Services
 {
@@ -15,9 +16,9 @@ namespace ProductsManager.Services
 
         Task<IEnumerable<ProductDTO>> GetAll();
 
-        Task<Guid> Save(ProductDTO product);
+        Task<Guid> Save(CreateProductModel product);
 
-        Task Update(ProductDTO product);
+        Task Update(UpdateProductModel product);
 
         Task Delete(Guid guid);
     }
